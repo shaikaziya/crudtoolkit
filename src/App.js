@@ -12,15 +12,24 @@ import {add,remove,update} from "./redux/User"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 function App() {
-  const [newUser, setNewUser] = useState({id:"", name: ""});
+  const [newUser, setNewUser] = useState({id:"", name: "",email:""});
   const [name, setName] = useState("");
   const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const { users } = useSelector((state) => state.user);
   const dispatch=useDispatch()
   console.log(users);
   return (
     <div className="App">
       <form>
+      <TextField
+          label="Enter id"
+          variant="standard"
+          value={id}
+          onChange={(e) => {
+            setId(e.target.value);
+          }}
+        />
         <TextField
           label="Enter name"
           variant="standard"
@@ -29,25 +38,30 @@ function App() {
             setName(e.target.value);
           }}
         />
-
         <TextField
           label="Enter email"
           variant="standard"
-          value={id}
+          value={email}
           onChange={(e) => {
-            setId(e.target.value);
+            setEmail(e.target.value);
           }}
         />
 
+        
+
         <br></br>
         <Button id="addUser" onClick={()=>{
-          if(!id ||! name){
+          // if(!id || ! name || !email)
+          if(!id || !name && !email){
             return 
 
           }
-          dispatch(add({id:id,name:name}))
-          setName("")
+          dispatch(add({id:id,name:name,email:email}))
           setId("")
+          setName("")
+          setEmail("")
+          
+          
 
         }}>Add User</Button>
       </form>
@@ -56,6 +70,7 @@ function App() {
           <TableRow>
           <TableCell>id</TableCell>
             <TableCell>Name</TableCell>
+            <TableCell>Email</TableCell>
             {/* <TableCell align="right">Email</TableCell> */}
             <TableCell align="right">Actions</TableCell>
           </TableRow>
@@ -72,13 +87,16 @@ function App() {
                   <TableCell component="th" scope="row">
                     {ele.name}
                   </TableCell>
+                  <TableCell component="th" scope="row">
+                    {ele.email}
+                  </TableCell>
                  
                   <TableCell align="right">
 
                   <Button onClick={() =>dispatch(remove(ele.id))}> <DeleteOutlineIcon />
                 
                   </Button>
-                  <Button onClick={() =>dispatch(update({id:ele.id,name:"update"}))}> <ModeEditIcon />
+                  <Button onClick={() =>dispatch(update({id:ele.id,name:"updatedname",email:"updatedemail"}))}> <ModeEditIcon />
                     </Button>
                   </TableCell>
                 </TableRow>
